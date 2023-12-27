@@ -4,7 +4,7 @@ function Home() {
   return(<>
   
   <div>
-    main
+    from the main
   </div>
   
   <div>
