@@ -1,7 +1,17 @@
 import React from "react";
 
 function Home() {
-  return (<>
+  return(<>
+  
+  <div>
+    main
+  </div>
+  
+  <div>
+    salman
+  </div>
+
+ 
   
   <div>tariq alshalahi</div>
   
