@@ -8,6 +8,10 @@ function Home() {
   <div>
     salman
   </div>
+
+ 
+  
+  <div>tariq alshalahi</div>
   
   </>)
 }
