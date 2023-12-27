@@ -7,6 +7,9 @@ function Home() {
     main
   </div>
   
+
+  <div>goooede</div>
+  
   <div>
     salman
   </div>
