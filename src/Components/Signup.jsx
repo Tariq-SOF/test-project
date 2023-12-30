@@ -1,183 +1,174 @@
-import React, { useState } from 'react'
-import Alert from './alert'
-export default function Signup() {
-    const [username , setUsername] =useState()
-    const [nationalID , setNationalID ] =useState()
-    const [email , setEmail] =useState()
-    const [password , setPassword] =useState()
-    const [confirmPassword , setConfirmPassword] =useState()
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-    const [message, setMessage] = useState();
+const ErrorMessage = ({ message, onHide }) => {
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      onHide();
+    }, 3000);
 
-    const [showAlert, setShowAlert] = useState(true);
+    return () => clearTimeout(timeout);
+  }, [onHide]);
 
-      // يمكنك استخدام حالة state لتحديد متى يجب عرض الـ alert
-    
-      // يمكنك استدعاء setShowAlert(false) بعد إتمام عملية التسجيل بنجاح
-    
-
-
-    const handelSubmit = () => {
-      if (username === "" || email === "" || password === "" || nationalID ==="" || confirmPassword === "") {
-        setMessage("Inputs is empty");
-      }
-       else if (!username.match(/^[a-zA-Z0-9]{5,25}$/)) {
-        setMessage("username should be more the 4 char");
-      } else if (
-        !email.match(/^[A-Za-z0-9-]+@[A-Za-z0-9-]+.[A-Za-z]{2,4}$/)
-      ) {
-        setMessage("Invalid email");
-      } else if (!password.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,20}$/)) {
-        setMessage(
-          "Invalid Password should be 6 contain at least one characters and one number"
-        );
-      }
-        else if (confirmPassword !== password  ){
-          setMessage("Password not match")
-  
-      } else {
-        axios
-          .post("https://6572e3a8192318b7db4135e3.mockapi.io/amazon", {
-            username: username,
-            email: email,
-            password: password,
-            nationalID:nationalID,
-  
-          })
-          .then( setMessage('good'));
-      }
-    };
-    
   return (
-   <>
-{/*<!-- component -->*/}
-<div class="w-screen h-screen flex items-center justify-center bg-gray-100">
-  <div class="w-full mx-auto">
-   {/*} <!-- Title -->*/}
-    <h1 class="text-3xl text-center font-bold mb-6">Alert Component</h1>
-    {/*<!-- End Title -->*/}
-
-   
-    {/*<!-- End Alert Success -->*/}
-
-    {/*<!-- Alert Error -->*/}
-    <div
-         class="bg-red-200 px-6 py-4 mx-2 my-4 rounded-md text-lg flex items-center mx-auto w-3/4 xl:w-2/4"
-         >
-      <svg
-           viewBox="0 0 24 24"
-           class="text-red-600 w-5 h-5 sm:w-5 sm:h-5 mr-3"
-           >
+    <div className="absolute top-0 left-0 right-0 bg-red-200 px-6 py-3 m-4 rounded-md text-sm flex items-center mx-auto w-3/4 xl:w-2/4">
+      <svg viewBox="0 0 24 24" className="text-red-600 w-4 h-4 sm:w-4 sm:h-4 mr-2">
         <path
-              fill="currentColor"
-              d="M11.983,0a12.206,12.206,0,0,0-8.51,3.653A11.8,11.8,0,0,0,0,12.207,11.779,11.779,0,0,0,11.8,24h.214A12.111,12.111,0,0,0,24,11.791h0A11.766,11.766,0,0,0,11.983,0ZM10.5,16.542a1.476,1.476,0,0,1,1.449-1.53h.027a1.527,1.527,0,0,1,1.523,1.47,1.475,1.475,0,0,1-1.449,1.53h-.027A1.529,1.529,0,0,1,10.5,16.542ZM11,12.5v-6a1,1,0,0,1,2,0v6a1,1,0,1,1-2,0Z"
-              ></path>
+          fill="currentColor"
+          d="M11.983,0a12.206,12.206,0,0,0-8.51,3.653A11.8,11.8,0,0,0,0,12.207,11.779,11.779,0,0,0,11.8,24h.214A12.111,12.111,0,0,0,24,11.791h0A11.766,11.766,0,0,0,11.983,0ZM10.5,16.542a1.476,1.476,0,0,1,1.449-1.53h.027a1.527,1.527,0,0,1,1.523,1.47,1.475,1.475,0,0,1-1.449,1.53h-.027A1.529,1.529,0,0,1,10.5,16.542ZM11,12.5v-6a1,1,0,0,1,2,0v6a1,1,0,1,1-2,0Z"
+        ></path>
       </svg>
-      <span class="text-red-800"> Your email address is invalid. </span>
+      <span className="text-red-800">{message}</span>
     </div>
-    {/*<!-- End Alert Error -->*/}
+  );
+};
 
-    {/*<!-- Alert Warning -->*/}
-    <div
-         class="bg-orange-200 px-6 py-4 my-4 rounded-md text-lg flex items-center mx-auto w-3/4 xl:w-2/4"
-         >
-      <svg
-           viewBox="0 0 24 24"
-           class="text-yellow-600 w-5 h-5 sm:w-5 sm:h-5 mr-3"
-           >
+const SuccessMessage = ({ message, onHide }) => {
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      onHide();
+    }, 2000);
+
+    return () => clearTimeout(timeout);
+  }, [onHide]);
+
+  return (
+    <div className="absolute top-0 left-0 right-0 bg-green-200 px-6 py-3 m-4 rounded-md text-lg flex items-center mx-auto w-3/4 xl:w-2/4">
+      <svg viewBox="0 0 24 24" className="text-green-600 w-5 h-5 sm:w-5 sm:h-5 mr-3">
         <path
-              fill="currentColor"
-              d="M23.119,20,13.772,2.15h0a2,2,0,0,0-3.543,0L.881,20a2,2,0,0,0,1.772,2.928H21.347A2,2,0,0,0,23.119,20ZM11,8.423a1,1,0,0,1,2,0v6a1,1,0,1,1-2,0Zm1.05,11.51h-.028a1.528,1.528,0,0,1-1.522-1.47,1.476,1.476,0,0,1,1.448-1.53h.028A1.527,1.527,0,0,1,13.5,18.4,1.475,1.475,0,0,1,12.05,19.933Z"
-              ></path>
+          fill="currentColor"
+          d="M12,0A12,12,0,1,0,24,12,12.014,12.014,0,0,0,12,0Zm6.927,8.2-6.845,9.289a1.011,1.011,0,0,1-1.43.188L5.764,13.769a1,1,0,1,1,1.25-1.562l4.076,3.261,6.227-8.451A1,1,0,1,1,18.927,8.2Z"
+        ></path>
       </svg>
-      <span class="text-yellow-800">
-        You are currently on the Free plan.
-      </span>
+      <span className="text-green-800">{message}</span>
     </div>
-    {/*<!-- End Alert Warning -->*/}
+  );
+};
 
-    {/*<!-- Alert Info -->*/}
-    <div
-         class="bg-blue-200 px-6 py-4 mx-2 my-4 rounded-md text-lg flex items-center mx-auto w-3/4 xl:w-2/4"
-         >
-      <svg
-           viewBox="0 0 24 24"
-           class="text-blue-600 w-5 h-5 sm:w-5 sm:h-5 mr-3"
-           >
-        <path
-              fill="currentColor"
-              d="M12,0A12,12,0,1,0,24,12,12.013,12.013,0,0,0,12,0Zm.25,5a1.5,1.5,0,1,1-1.5,1.5A1.5,1.5,0,0,1,12.25,5ZM14.5,18.5h-4a1,1,0,0,1,0-2h.75a.25.25,0,0,0,.25-.25v-4.5a.25.25,0,0,0-.25-.25H10.5a1,1,0,0,1,0-2h1a2,2,0,0,1,2,2v4.75a.25.25,0,0,0,.25.25h.75a1,1,0,1,1,0,2Z"
-              ></path>
-      </svg>
-      <span class="text-blue-800"> We've updated a few things. </span>
+const SignUpForm = () => {
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isErrorVisible, setIsErrorVisible] = useState(false);
+  const [isSuccessVisible, setIsSuccessVisible] = useState(false);
+
+  const validateForm = () => {
+    // ... الشروط الحالية
+
+    // التحقق من صحة اسم المستخدم (يجب أن يكون أكبر من 6 أحرف)
+    if (username.length < 6) {
+      setError('اسم المستخدم يجب أن يكون أكبر من 6 أحرف');
+      return false;
+    }
+
+    // التحقق من صحة البريد الإلكتروني
+    if (!/^[A-Za-z0-9-.]+@[A-Za-z0-9-]+.[A-Za-z]{2,4}$/.test(email)) {
+      setError('البريد الإلكتروني غير صالح');
+      return false;
+    }
+
+    // التحقق من صحة رقم الجوال (يجب أن يكون بداية من 05 ويحتوي على 10 أرقام)
+    if (!/^05\d{8}$/.test(phone)) {
+      setError('رقم الجوال غير صالح');
+      return false;
+    }
+
+    // التحقق من صحة الرقم السري (يجب أن لا يقل عن 8 أحرف ويحتوي على أحرف كبيرة وصغيرة وأرقام)
+    if (!/^[A-Za-z0-9-].{6,}$/.test(password)) {
+      setError('الرقم السري يجب أن يكون على الأقل 8 أحرف ويحتوي على أحرف كبيرة وصغيرة وأرقام');
+      return false;
+    }
+    // تمرير جميع الاختبارات، لا يوجد أخطاء
+    setError('');
+    return true;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      // يمكنك هنا إجراء أي عملية تسجيل دخول أو إرسال البيانات
+showSuccessMessage();
+      // حفظ البيانات في الAPI
+      axios.post("https://6552c0675449cfda0f2dca61.mockapi.io/uesers", {
+        UserName: username,
+        Email: email,
+        Phone: phone,
+        Password: password,
+      })
+        .then(response => {
+          console.log('تم حفظ البيانات بنجاح:', response.data);
+           
+        })
+        .catch(error => {
+          console.error('حدث خطأ أثناء حفظ البيانات:', error);
+        });
+    }
+  };
+
+  const showErrorMessage = () => {
+    setError('');
+    setIsErrorVisible(true);
+  };
+
+  const hideErrorMessage = () => {
+    setIsErrorVisible(false);
+  };
+
+  const showSuccessMessage = () => {
+    setIsSuccessVisible(true);
+  };
+
+  const hideSuccessMessage = () => {
+    setIsSuccessVisible(false);
+  };
+
+  return (
+    <div className="bg-gray-100 h-screen flex items-center justify-center relative">
+      <div className="bg-white p-8 rounded shadow-md w-96">
+        <h2 className="text-2xl font-semibold mb-6">تسجيل الدخول</h2>
+
+        {/* عرض رسالة الخطأ إذا كان هناك خطأ */}
+        {isErrorVisible && <ErrorMessage message={error} onHide={hideErrorMessage} />}
+
+        {/* عرض رسالة النجاح إذا تم حفظ البيانات بنجاح */}
+        {isSuccessVisible && <SuccessMessage message="تم حفظ البيانات بنجاح" onHide={hideSuccessMessage} />}
+
+         <form onSubmit={handleSubmit}>
+          {/* حقل اسم المستخدم */}
+          <div className="mb-4">
+            <label htmlFor="username" className="block text-sm text-[12px]  text-gray-600">اسم المستخدم</label>
+            <input type="text" id="username" name="username" className=" p-2 w-[35vh] h-[5vh] text-[12px] mt-1  rounded-md border-[1px] shadow-sm " onChange={(e) => setUsername(e.target.value)} placeholder="ادخل اسم المستخدم"/>
+          </div>  
+          {/* حقل البريد الإلكتروني */}
+          <div className="mb-4">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-600">البريد الإلكتروني</label>
+            <input type="email" id="email" name="email" className=" p-2 w-[35vh] h-[5vh] text-[12px] mt-1  rounded-md border-[1px] shadow-sm"onChange={(e) => setEmail(e.target.value)}placeholder="ادخل البريد الإلكتروني" />
+          </div>
+
+          {/* حقل رقم الجوال */}
+          <div className="mb-4">
+            <label htmlFor="phone" className="block text-sm font-medium text-gray-600">رقم الجوال</label>
+            <input type="tel" id="phone" name="phone" className=" p-2 w-[35vh] h-[5vh] text-[12px] mt-1  rounded-md border-[1px] shadow-sm" onChange={(e) => setPhone(e.target.value)}placeholder="ادخل رقم الجوال" />
+          </div>
+
+          {/* حقل الرقم السري */}
+          <div className="mb-6">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-600">الرقم السري</label>
+            <input type="password" id="password" name="password" className=" p-2 w-[35vh] h-[5vh] text-[12px] mt-1  rounded-md border-[1px] shadow-sm" onChange={(e) => setPassword(e.target.value)} />
+          </div>
+
+          {/* زر الإرسال */}
+          <div className="flex items-center justify-between">
+            <button type="submit" onClick={showErrorMessage} className="w-[35vh] h-[5vh] rounded-md bg-[#fbf429] font-bold shadow-md text-[12px] transition duration-500 hover:bg-[#faf4509e]">
+              تسجيل الدخول
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
-    {/*<!-- End Alert Info -->*/}
-  </div>
-</div>
+  );
+};
 
-<div class="h-screen md:flex  ">
-
-	<div  class="flex md:w-1/2 justify-center py-10 items-center bg-white ">
-		<div class="bg-white ">
-			<h1 class="text-gray-800 font-bold text-2xl mb-4">تسجيل جديد</h1>
-            <div className=' flex gap-5 justify-end rounded-lg mb-4'><button class="text-sm font-normal text-black bg-primary rounded-lg p-1">مالك عقار</button>
-            <button class="text-sm font-normal text-gray-600 ">مستأجر</button></div>
-			
-			<div  class="flex items-center border-2 py-2 px-3 rounded-2xl mb-4">
-				<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-					fill="currentColor">
-					<path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-						clip-rule="evenodd" />
-				</svg>
-				<input value={username} onChange={(e)=>setUsername(e.target.value)} class="pl-2 outline-none border-none" type="text" name="" id="" placeholder="اسم المستخدم" />
-      </div>
-				<div class="flex items-center border-2 py-2 px-3 rounded-2xl mb-4">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none"
-						viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-							d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4" />
-					</svg>
-					<input value={nationalID} onChange={(e)=>setNationalID(e.target.value)} class="pl-2 outline-none border-none" type="text" name="" id="" placeholder="رقم الهوية" />
-      </div>
-					<div class="flex items-center border-2 py-2 px-3 rounded-2xl mb-4">
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none"
-							viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-								d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
-						</svg>
-						<input value={email} onChange={(e)=>setEmail(e.target.value)} class="pl-2 outline-none border-none" type="text" name="" id="" placeholder="البريد الإلكتروني" />
-      </div>
-						<div class="flex items-center border-2 py-2 px-3 rounded-2xl mb-4">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-								fill="currentColor">
-								<path fill-rule="evenodd"
-									d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-									clip-rule="evenodd" />
-							</svg>
-							<input value={password} onChange={(e)=>setPassword(e.target.value)} class="pl-2 outline-none border-none" type="text" name="" id="" placeholder="كلمة السر" />
-      </div>
-      <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-								fill="currentColor">
-								<path fill-rule="evenodd"
-									d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-									clip-rule="evenodd" />
-							</svg>
-							<input value={confirmPassword} onChange={(e)=>setConfirmPassword(e.target.value)} class="pl-2 outline-none border-none" type="text" name="" id="" placeholder="تاكيد كلمة السر" />
-      </div>
-
-<button onClick={handelSubmit} class="block w-full bg-primary mt-4 py-2 rounded-2xl text-black font-semibold mb-2">التسجيل</button>
-
-
-
-		</div>
-	</div>
-
-</div>
-
-
-
-
-   </>
-  )
-}
+export default SignUpForm;
